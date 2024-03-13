@@ -1,0 +1,19 @@
+# =============================================================================
+# File      : readme.org -- Readme of the princeton tex template
+# Author    : Jürgen Hackl <hackl@princeton.edu>
+# Time-stamp: <Thu 2024-01-18 20:30 juergen>
+# Copyright (c) 2023 Jürgen Hackl <hackl@princeton.edu>
+# =============================================================================
+#+OPTIONS: toc:nil
+#+OPTIONS: num:t
+#+OPTIONS: tags:nil
+#+TITLE: princeton-tex
+#+SUBTITLE: LaTeX Template for Reports
+#+AUTHOR: Jürgen Hackl
+#+EMAIL: <hackl@princeton.edu>
+
+# -----------------------------------------------------------------------------
+#+LATEX_COMPILER: lualatex
+#+LATEX_CLASS: princeton
+#+LATEX_CLASS_OPTIONS: [11pt]
+# =============================================================================
