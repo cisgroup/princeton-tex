@@ -32,6 +32,9 @@
 % Draft document
 \DeclareBoolOption[false]{draft}
 
+% Color links
+\DeclareBoolOption[false]{colorlinks}
+
 % Spacing between items
 \DeclareStringOption[-.5ex]{itemsep}[-.5ex]
 
@@ -425,3 +428,9 @@
 % Hyper references
 % ================
 \RequirePackage[draft=false]{hyperref}
+
+\hypersetup{
+colorlinks=princeton@colorlinks,
+allcolors=pu-orange, %  Set all color options
+allbordercolors=pu-orange, % Set all border color options
+}
