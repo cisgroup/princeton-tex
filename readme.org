@@ -1,7 +1,7 @@
 # =============================================================================
 # File      : readme.org -- Readme of the princeton tex template
 # Author    : Jürgen Hackl <hackl@princeton.edu>
-# Time-stamp: <Thu 2024-01-18 20:30 juergen>
+# Time-stamp: <Wed 2024-03-13 09:38 juergen>
 # Copyright (c) 2023 Jürgen Hackl <hackl@princeton.edu>
 # =============================================================================
 #+OPTIONS: toc:nil
@@ -17,3 +17,20 @@
 #+LATEX_CLASS: princeton
 #+LATEX_CLASS_OPTIONS: [11pt]
 # =============================================================================
+* Introduction
+* Installation
+
+Installation for development on MacOS. 
+
+1. Create local path for custom latex classes
+
+#+begin_src 
+mkdir /Users/juergen/Library/texmf/tex/latex/
+#+end_src 
+
+2. Make symbolic link to the class file
+
+#+begin_src 
+ln -s /Users/juergen/dev/princeton-tex/princeton.cls /Users/juergen/Library/texmf/tex/latex/
+ln -s /Users/juergen/dev/princeton-tex/princeton-logo.pdf /Users/juergen/Library/texmf/tex/latex/
+#+end_src
