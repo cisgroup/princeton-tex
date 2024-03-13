@@ -100,7 +100,7 @@
 \setlength{\princeton@marginparwidth}{1.7in}
 
 \newlength{\princeton@marginparsep}
-\setlength{\princeton@marginparsep}{.2in}
+\setlength{\princeton@marginparsep}{.4in}
 
 
 % Maketitle
