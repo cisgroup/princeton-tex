@@ -1,0 +1,149 @@
+\documentclass[
+11pt,
+% twoside,
+marginpos=left,
+class=article,
+draft=true,
+itemsep=1ex,
+titleformat=simple,
+colorlinks=true
+]{princeton}
+\usepackage{blindtext}
+
+\version{v1}
+
+\author{Jürgen Hackl}
+
+\email{hackl@princeton.edu}
+
+\address{
+  Princeton University\\
+  54 Olden Street\\
+  Princeton, NJ 08544
+}
+
+\date{\today}
+
+\pretitle{My Pre-Title}
+\title{The main title of this Document}
+\subtitle{Some sub-title if needed}
+
+\titlesize{\LARGE}
+
+
+\begin{document}
+
+\maketitle
+
+\makeinfo
+
+\tableofcontents
+
+\blindtext
+
+\section{This is a test section}
+\subsection{Followed by a subsection}
+\subsubsection{Followed by a subsubsection}
+
+\begin{margindescription}
+\item[Created] 2023-05-01 13:00
+\item[Modified] 2023-05-01 13:00
+\end{margindescription}
+
+\blindtext
+
+
+\subsection{Followed by a subsection}
+
+
+\blindtext
+
+``some'' thist "with" \emph{emph}.
+
+\begin{itemize}
+\item \blindtext
+\item \blindtext
+\item And one more
+\end{itemize}
+
+
+\begin{enumerate}
+\item \blindtext
+\item \blindtext
+\item And one more
+\end{enumerate}
+
+
+
+
+\blindtext
+\subsection{An other subsection}
+\blindtext
+\subsubsection{Test}
+\begin{marginfigure}%
+        \caption{My caption}
+        \includegraphics[width=\marginparwidth]{example-image-a}
+    \end{marginfigure}
+
+    \blindtext
+    \blindtext
+    \blindtext
+    \blindtext
+
+\begin{marginfigure}%
+        \caption{My caption}
+        \includegraphics[width=\marginparwidth]{example-image-a}
+    \end{marginfigure}
+
+\blindtext
+    
+    \begin{figure}[h]
+        \sidecaption{My caption}
+        \includegraphics[width=\textwidth]{example-image-a}
+    \end{figure}
+
+    \blindtext
+
+    \blindtext
+    \blindtext
+    \blindtext
+    \blindtext
+    \blindtext
+    \blindtext
+    \blindtext
+    
+    \begin{largefigure}[h]%
+      \sidecaption{My caption}
+        \includegraphics[width=\linewidth]{example-image-a}
+    \end{largefigure}%
+
+
+    
+
+
+    \blindtext
+    \blindtext
+    \blindtext
+    
+    \begin{largefigure}[ht]%
+        \sidecaption{My caption}
+        \includegraphics[width=\linewidth]{example-image-a}
+    \end{largefigure}%
+
+
+\blindtext
+
+\blindtext
+
+\blindtext
+
+\blindtext
+
+\fullfigure[height=4in,align=t,angle=180]{example-image-b}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
