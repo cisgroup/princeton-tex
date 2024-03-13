@@ -235,6 +235,19 @@
   \makebox[0pt][r]{#1\hspace{6pt}}%
 }
 
+% Section title in the margin
+% https://tex.stackexchange.com/questions/291973/titlesec-chapter-in-top-margin
+
+\newcommand{\marginsection}[1]{%
+  \marginnote{
+    \makebox[0pt][l]{%
+      \parbox[t]{\marginparwidth}{%
+        \raggedright#1%
+      }%
+    }%
+  }%
+}%
+
 \ifthenelse{\equal{\princeton@titleformat}{simple}}
 {% Simple spacing
   \titleformat{\section}
@@ -259,26 +272,52 @@
   \titlespacing{\subsection}{0pt}{8pt plus 4pt minus 2pt}{2pt plus 2pt minus 2pt}
   
 }
-{% Fancy Spacing
-  \titleformat{\section}
-  {\normalfont\Large\it\color{pu-orange}}
-  {\small\marginsecnumber\thesection}
-  {0pt}
-  {}[\vskip-12pt{\makebox[\linewidth][l]{\color{pu-orange}\rule{0.99\textwidth}{1.2pt}}}]
+{% Else If CV
+  \ifthenelse{\equal{\princeton@titleformat}{cv}}
+  {% CV spacing
+    \titleformat{\section}
+    {\normalfont\large\bfseries\color{pu-orange}}
+    {\scriptsize\marginsecnumber\thesection}
+    {0pt}
+    {}
 
-  \titleformat{\subsection}
-  {\normalfont\large\bfseries\color{pu-orange}}
-  {\scriptsize\marginsecnumber\thesubsection}
-  {0pt}
-  {}
+    \titleformat{\subsection}
+    {\normalfont\normalsize\bfseries\color{black}}
+    {\scriptsize\marginsecnumber\thesubsection}
+    {0pt}
+    {}
 
-  \titleformat{\subsubsection}
-  {\normalfont\normalsize\bfseries\color{black}}
-  {\scriptsize\marginsecnumber\thesubsubsection}
-  {0pt}
-  {}
+    \titleformat{\subsubsection}[leftmargin]
+    {\normalfont\normalsize\bfseries\color{black}}
+    {}
+    {0pt}
+    {\marginsection}
 
-  \titlespacing{\subsubsection}{0pt}{8pt plus 4pt minus 2pt}{2pt plus 2pt minus 2pt}
+    \titlespacing{\section}{0pt}{12pt plus 4pt minus 2pt}{4pt plus 2pt minus 2pt}
+    \titlespacing{\subsection}{0pt}{8pt plus 4pt minus 2pt}{2pt plus 2pt minus 2pt}
+    
+  }% Else
+  {% Fancy Spacing
+    \titleformat{\section}
+    {\normalfont\Large\it\color{pu-orange}}
+    {\small\marginsecnumber\thesection}
+    {0pt}
+    {}[\vskip-12pt{\makebox[\linewidth][l]{\color{pu-orange}\rule{0.99\textwidth}{1.2pt}}}]
+
+    \titleformat{\subsection}
+    {\normalfont\large\bfseries\color{pu-orange}}
+    {\scriptsize\marginsecnumber\thesubsection}
+    {0pt}
+    {}
+
+    \titleformat{\subsubsection}
+    {\normalfont\normalsize\bfseries\color{black}}
+    {\scriptsize\marginsecnumber\thesubsubsection}
+    {0pt}
+    {}
+
+    \titlespacing{\subsubsection}{0pt}{8pt plus 4pt minus 2pt}{2pt plus 2pt minus 2pt}
+  }
 }
 
 % Enumeration
