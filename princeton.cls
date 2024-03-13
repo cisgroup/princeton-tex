@@ -240,9 +240,11 @@
 
 \newcommand{\marginsection}[1]{%
   \marginnote{
-    \makebox[0pt][l]{%
-      \parbox[t]{\marginparwidth}{%
-        \raggedright#1%
+    \smash{
+      \makebox[0pt][l]{%
+        \parbox[t]{\marginparwidth}{%
+          \raggedright#1%
+        }%
       }%
     }%
   }%
@@ -295,6 +297,8 @@
 
     \titlespacing{\section}{0pt}{12pt plus 4pt minus 2pt}{4pt plus 2pt minus 2pt}
     \titlespacing{\subsection}{0pt}{8pt plus 4pt minus 2pt}{2pt plus 2pt minus 2pt}
+    \titlespacing{\subsubsection}{0pt}{8pt plus 4pt minus 2pt}{2pt plus 2pt minus 2pt}
+    \titlespacing{\paragraph}{0pt}{4pt}{2pt}
     
   }% Else
   {% Fancy Spacing
@@ -461,6 +465,39 @@
   % \endgroup%
 }%
 
+% CV commands
+% ===========
+\newcommand{\cvmargin}[1]{
+  \noindent\marginnote{\textit{\footnotesize{#1}}}\ignorespaces%
+}
+
+\def\namedlabel#1#2{\begingroup
+    #2%
+    \def\@currentlabel{#2}%
+    \phantomsection\label{#1}\endgroup
+}
+
+\newcommand{\cvinfo}[1]{\hfill {\footnotesize \textbf{#1}}}
+\newcommand{\cvinfoit}[1]{\hfill {\footnotesize \textit{#1}}}
+\newcommand{\cvlabel}[1]{\makebox[0pt][r]{\scriptsize[\namedlabel{itm:#1}{#1}]\hspace{6pt}}}
+%\newcommand{\cvref}[1]{\scriptsize[\ref{itm:#1}]}
+
+\NewDocumentCommand{\cvref}{O{none} m O{} O{\scriptsize}}{%
+  #4%
+  \ifthenelse{\equal{#1}{none}}{%
+    \ref{itm:#2}#3%
+  }{%
+    \ifthenelse{\equal{#1}{left}}{%
+      [\ref{itm:#2}#3%
+    }{%
+      \ifthenelse{\equal{#1}{right}}{%
+        \ref{itm:#2}]%
+      }{%
+        [\ref{itm:#2}]%
+      }%
+    }%
+  }%
+}% end NewDocumentCommand
 % Bibliography  
 % ============
 
