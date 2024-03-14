@@ -479,23 +479,24 @@
 
 \newcommand{\cvinfo}[1]{\hfill {\footnotesize \textbf{#1}}}
 \newcommand{\cvinfoit}[1]{\hfill {\footnotesize \textit{#1}}}
-\newcommand{\cvlabel}[1]{\makebox[0pt][r]{\scriptsize[\namedlabel{itm:#1}{#1}]\hspace{6pt}}}
+\newcommand{\cvlabel}[1]{\makebox[0pt][r]{\scriptsize[\namedlabel{cv:#1}{#1}]\hspace{6pt}}}
 %\newcommand{\cvref}[1]{\scriptsize[\ref{itm:#1}]}
 
-\NewDocumentCommand{\cvref}{O{none} m O{} O{\scriptsize}}{%
-  #4%
+\NewDocumentCommand{\cvref}{O{none} m O{\normalsize}}{%
+  {#3%
   \ifthenelse{\equal{#1}{none}}{%
-    \ref{itm:#2}#3%
+    \ref{cv:#2}%
   }{%
     \ifthenelse{\equal{#1}{left}}{%
-      [\ref{itm:#2}#3%
+      [\ref{cv:#2}%
     }{%
       \ifthenelse{\equal{#1}{right}}{%
-        \ref{itm:#2}]%
+        \ref{cv:#2}]%
       }{%
-        [\ref{itm:#2}]%
+        [\ref{cv:#2}]%
       }%
     }%
+  }%
   }%
 }% end NewDocumentCommand
 % Bibliography  
