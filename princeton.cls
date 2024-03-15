@@ -479,7 +479,8 @@
 
 \newcommand{\cvinfo}[1]{\hfill {\footnotesize \textbf{#1}}}
 \newcommand{\cvinfoit}[1]{\hfill {\footnotesize \textit{#1}}}
-\newcommand{\cvlabel}[1]{\makebox[0pt][r]{\scriptsize[\namedlabel{cv:#1}{#1}]\hspace{6pt}}}
+\newcommand{\cvlabel}[1]{\makebox[0pt][r]{\scriptsize[\namedlabel{cv:#1}{#1}]\hspace{6pt}}\ignorespaces}
+\newcommand{\cvitem}[2]{\cvmargin{#1}\cvlabel{#2}}
 %\newcommand{\cvref}[1]{\scriptsize[\ref{itm:#1}]}
 
 \NewDocumentCommand{\cvref}{O{none} m O{\normalsize}}{%
