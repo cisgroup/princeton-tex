@@ -283,21 +283,21 @@
     {0pt}
     {}
 
-    \titleformat{\subsection}
-    {\normalfont\normalsize\bfseries\color{black}}
-    {\scriptsize\marginsecnumber\thesubsection}
-    {0pt}
-    {}
-
-    \titleformat{\subsubsection}[leftmargin]
+    \titleformat{\subsection}[leftmargin]
     {\normalfont\normalsize\bfseries\color{black}}
     {}
     {0pt}
     {\marginsection}
 
+    \titleformat{\subsubsection}
+    {\normalfont\normalsize\it\color{black}}
+    {\scriptsize\marginsecnumber\thesubsubsection}
+    {0pt}
+    {}
+
     \titlespacing{\section}{0pt}{12pt plus 4pt minus 2pt}{4pt plus 2pt minus 2pt}
     \titlespacing{\subsection}{0pt}{8pt plus 4pt minus 2pt}{2pt plus 2pt minus 2pt}
-    \titlespacing{\subsubsection}{0pt}{8pt plus 4pt minus 2pt}{2pt plus 2pt minus 2pt}
+    \titlespacing{\subsubsection}{0pt}{8pt plus 4pt minus 2pt}{4pt plus 2pt minus 2pt}
     \titlespacing{\paragraph}{0pt}{4pt}{2pt}
     
   }% Else
