@@ -36,7 +36,7 @@
 \DeclareBoolOption[false]{colorlinks}
 
 % Spacing between items
-\DeclareStringOption[-.5ex]{itemsep}[-.5ex]
+\DeclareStringOption[.0ex]{itemsep}[.0ex]
 
 % Format of the sections
 \DeclareStringOption[simple]{titleformat}[simple]
@@ -506,9 +506,7 @@
 % Hyper references
 % ================
 \RequirePackage[draft=false]{hyperref}
-
 \hypersetup{
-colorlinks=princeton@colorlinks,
 allcolors=pu-orange, %  Set all color options
 allbordercolors=pu-orange, % Set all border color options
 }
