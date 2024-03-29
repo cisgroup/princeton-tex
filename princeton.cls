@@ -35,6 +35,9 @@
 % Color links
 \DeclareBoolOption[false]{colorlinks}
 
+% Date shown
+\DeclareBoolOption[false]{date}
+
 % Spacing between items
 \DeclareStringOption[.0ex]{itemsep}[.0ex]
 
@@ -203,7 +206,20 @@
 % Set new variables
 \fancyhead[L]{}
 \fancyhead[R]{}
-  \fancyfoot[R]{\ifthenelse{\boolean{princeton@draft}}{\textbf{DRAFT - }}{} \ifdefempty{\princeton@version}{}{\today-\princeton@version ~-~}\thepage}%
+\fancyfoot[R]{%
+  \ifthenelse{\boolean{princeton@draft}}% If draft is true
+  {% show DRAFT text
+    \textbf{DRAFT -}
+  }{% else do noting
+  }% end if draft
+  \ifdefempty{\princeton@version}% check if version is defined
+  {% if no version is defined
+    \ifthenelse{\boolean{princeton@date}}{\today ~-~}{}%
+  }{% else if version is defined
+    \today-\princeton@version ~-~%
+  }% end if
+  \thepage
+}%
 % Disable line in the header
 \renewcommand{\headrulewidth}{0pt}
 
@@ -212,7 +228,20 @@
 \fancypagestyle{plain}{%
   \renewcommand{\headrulewidth}{0pt}%
   \fancyhf{}%
-  \fancyfoot[R]{\ifthenelse{\boolean{princeton@draft}}{\textbf{DRAFT - }}{} \ifdefempty{\princeton@version}{}{\today-\princeton@version ~-~}\thepage}%
+  \fancyfoot[R]{%
+    \ifthenelse{\boolean{princeton@draft}}% If draft is true
+    {% show DRAFT text
+      \textbf{DRAFT -}
+    }{% else do noting
+    }% end if draft
+    \ifdefempty{\princeton@version}% check if version is defined
+    {% if no version is defined
+      \ifthenelse{\boolean{princeton@date}}{\today ~-~}{}%
+    }{% else if version is defined
+      \today-\princeton@version ~-~%
+    }% end if
+    \thepage
+  }%
 }
 
 
