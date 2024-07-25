@@ -452,6 +452,52 @@
 \RequirePackage{keyval}
 \RequirePackage{tikz}
 
+\RequirePackage{caption}
+
+\newlength{\figureoffset}
+\setlength{\figureoffset}{-1.5em}
+
+\DeclareCaptionFormat{margin}{\marginnote{#1#2#3}[\figureoffset]}
+
+\captionsetup[figure]{font=footnotesize,labelfont=bf,name=Fig.}
+
+% fix side caption
+% https://tex.stackexchange.com/questions/620891/sidecaption-and-capion-text
+\NewDocumentCommand{\SideCaption}{sO{#3}mO{-2\baselineskip}}{%
+  \IfBooleanTF{#1}
+   {% \sidecaption*
+    \IfNoValueTF{#4}{\sidecaption*{#3}}{\sidecaption*[#4]{#3}}%
+   }
+   {% \sidecaption
+    \IfNoValueTF{#4}{\sidecaption[#2]{#3}}{\sidecaption[#2][#4]{#3}}%
+   }%
+ }
+
+ \NewDocumentCommand{\testcaption}{m}{%
+   \marginnote{\caption{#1}}
+}
+
+% Create custom figure environment
+
+\NewDocumentEnvironment{princetonfigure}{O{htbp}O{f}o}
+{%
+  \IfValueT{#3}{\setlength{\figureoffset}{#3}}
+  \ifthenelse{\equal{#2}{m}}{%
+    \begin{marginfigure}
+    }{%
+      \begin{figure}[#1]
+        \captionsetup{format=margin}
+      }
+    }%
+    {%
+      \ifthenelse{\equal{#2}{m}}{%
+      \end{marginfigure}
+    }{%
+    \end{figure}
+  }%
+}%
+
+
 % https://tex.stackexchange.com/questions/34312/how-to-create-a-command-with-key-values
 
 % Initialize length values
