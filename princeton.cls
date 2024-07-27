@@ -459,7 +459,11 @@
 
 \DeclareCaptionFormat{margin}{\marginnote{#1#2#3}[\figureoffset]}
 
-\captionsetup[figure]{font=footnotesize,labelfont=bf,name=Fig.}
+
+\captionsetup{font=footnotesize,labelfont=bf}
+\captionsetup[figure]{name=Fig.}
+\captionsetup[table]{name=Tab.}
+
 
 % fix side caption
 % https://tex.stackexchange.com/questions/620891/sidecaption-and-capion-text
@@ -473,10 +477,6 @@
    }%
  }
 
- \NewDocumentCommand{\testcaption}{m}{%
-   \marginnote{\caption{#1}}
-}
-
 % Create custom figure environment
 
 \NewDocumentEnvironment{princetonfigure}{O{htbp}O{f}o}
@@ -484,6 +484,7 @@
   \IfValueT{#3}{\setlength{\figureoffset}{#3}}
   \ifthenelse{\equal{#2}{m}}{%
     \begin{marginfigure}
+      \captionsetup{font=footnotesize,labelfont=bf,name=Fig.}
     }{%
       \begin{figure}[#1]
         \captionsetup{format=margin}
@@ -493,6 +494,7 @@
       \ifthenelse{\equal{#2}{m}}{%
       \end{marginfigure}
     }{%
+      \vspace{-2\baselineskip}
     \end{figure}
   }%
 }%
