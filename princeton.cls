@@ -44,6 +44,9 @@
 % Format of the sections
 \DeclareStringOption[simple]{titleformat}[simple]
 
+% Logo Options
+\DeclareStringOption[default]{logo}[default]
+
 
 % Apply provided options to the parent class (here article)
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOptionKey}{\princeton@class}}
@@ -183,15 +186,31 @@
 % Logo
 % ====
 \RequirePackage{eso-pic}
-
-\AddToShipoutPictureFG{
-  \AtPageUpperLeft{%
-    \put(\LenToUnit{\boarder},\LenToUnit{-\boarder}){%
-      \raisebox{-\height}{%
-        \includegraphics[width=1.5in]{princeton-logo}
+\ifthenelse{\equal{\princeton@logo}{default}}
+{% Default image
+  \AddToShipoutPictureFG{
+    \AtPageUpperLeft{%
+      \put(\LenToUnit{\boarder},\LenToUnit{-\boarder}){%
+        \raisebox{-\height}{%
+          \includegraphics[width=1.5in]{princeton-logo}
+        }%
       }%
     }%
-  }%
+  }
+}{
+  \ifthenelse{\equal{\princeton@logo}{first}}
+  {
+    \AddToShipoutPictureFG*{
+      \AtPageUpperLeft{%
+        \put(\LenToUnit{\boarder},\LenToUnit{-\boarder}){%
+          \raisebox{-\height}{%
+            \includegraphics[width=1.5in]{princeton-logo}
+          }%
+        }%
+      }%
+    }
+  }
+  {}
 }
 
 
