@@ -1,7 +1,6 @@
 # =============================================================================
 # File      : readme.org -- Readme of the princeton tex template
 # Author    : Jürgen Hackl <hackl@princeton.edu>
-# Time-stamp: <Wed 2024-03-13 09:38 juergen>
 # Copyright (c) 2023 Jürgen Hackl <hackl@princeton.edu>
 # =============================================================================
 #+OPTIONS: toc:nil
@@ -18,19 +17,108 @@
 #+LATEX_CLASS_OPTIONS: [11pt]
 # =============================================================================
 * Introduction
+
+A LaTeX document class for Princeton University documents. Its defining feature
+is a wide left margin used as a real content area: section numbers, the author
+block, captions and figures all live out there.
+
+Two visual identities are available through the =theme= option:
+
+- =classic= :: the University identity, Princeton Monticello with orange EE7F2D
+- =engineering= :: the Princeton Engineering identity published October 2024,
+  Libre Franklin with orange F58025 and Caslon Doric Condensed for display
+
+Both compile under =lualatex= and =pdflatex=. The licensed Princeton fonts are
+used when installed; otherwise the class falls back to open faces that ship with
+TeX Live, so a collaborator without them still gets a good document.
+
 * Installation
 
-Installation for development on MacOS. 
-
-1. Create local path for custom latex classes
-
-#+begin_src 
-mkdir /Users/juergen/Library/texmf/tex/latex/
-#+end_src 
-
-2. Make symbolic link to the class file
-
-#+begin_src 
-ln -s /Users/juergen/dev/princeton-tex/princeton.cls /Users/juergen/Library/texmf/tex/latex/
-ln -s /Users/juergen/dev/princeton-tex/princeton-logo.pdf /Users/juergen/Library/texmf/tex/latex/
+#+begin_src sh
+make install
 #+end_src
+
+This symlinks the class, the module and the mark assets into your =TEXMFHOME=,
+resolved with =kpsewhich=, so it works on any machine without editing paths.
+
+The class is *not* a single file. It needs =princeton-identity.sty= and the
+=princeton-mark-*.pdf= assets alongside it. Installing only =princeton.cls=
+fails with =File `princeton-identity.sty' not found=.
+
+To build without installing anything, put the repository root on =TEXINPUTS=,
+which is what the Makefile does.
+
+* Usage
+
+#+begin_src sh
+make            # build the example with both engines, into build/
+make lua        # lualatex only
+make pdf        # pdfLaTeX only
+make reference  # refresh the regression baseline in baseline/
+make assets     # regenerate the Engineering marks from the identity asset pack
+make clean      # remove build output
+#+end_src
+
+=examples/example.tex= documents every option and exercises every command.
+Compiling it and looking at the result is the quickest way to check the class is
+working. To see a different configuration, edit one line in its option block.
+
+* Options
+
+| Option        | Values                                    | Default       |
+|---------------+-------------------------------------------+---------------|
+| =class=       | any base class                            | =article=     |
+| =theme=       | =classic=, =engineering=                  | =classic=     |
+| =titleformat= | =simple=, =cv=, =fancy=                   | =simple=      |
+| =columns=     | =one=, =two=                              | =one=         |
+| =logo=        | =default=, =first=, =running=, =none=     | =default=     |
+| =logocolor=   | =color=, =black=                          | =color=       |
+| =signature=   | =engineering=, =university=, =none=       | =engineering= |
+| =fontset=     | =auto=, =princeton=, =free=               | =auto=        |
+| =marginpos=   | =left=, =right=                           | =left=        |
+| =itemcolor=   | any defined colour                        | =pu-gray=     |
+| =itemsep=     | any length                                | =.0ex=        |
+| =colorlinks=  | =true=, =false=                           | =true=        |
+| =date=        | =true=, =false=                           | =false=       |
+| =titledate=   | =true=, =false=                           | =false=       |
+| =draft=       | =true=, =false=                           | =false=       |
+
+Unrecognised values are rejected with the valid list, rather than silently
+falling through to a default.
+
+Note that =twocolumn= is *not* accepted. It would apply to page one as well, and
+passing it to the base class collapses the text block. Use =columns=two=, which
+keeps page one one-column with the wide margin and sets the body from page two
+in two columns.
+
+* Commands
+
+Margin apparatus: =\makeinfo=, =margindescription=, =customdescription=.
+
+Floats: =marginfigure=, =\sidecaption=, =\SideCaption=, =princetonfigure=,
+=largefigure=, =largetable=, =\fullfigure=.
+
+Metadata: =\pretitle=, =\subtitle=, =\titlesize=, =\email=, =\address=,
+=\version=.
+
+Type: =\textos= and =\texttab= for oldstyle and tabular figures,
+=\princetondisplay= for the display cut.
+
+CV: =\cvmargin=, =\cvinfo=, =\cvinfoit=, =\cvitem=, =\cvlabel=, =\cvref=. These
+must begin a paragraph: =\cvlabel= hangs its key left of the current position,
+so only at the start of a line does it land in the gap beside the text.
+
+Columns: =\startcolumns=, if you want the two-column seam somewhere other than
+the first section.
+
+Under =columns=two= every one of these keeps its name. The margin ones fall back
+to column-width equivalents, so a document switches layout without a single
+environment being renamed.
+
+* Licence
+
+The class and its sources are MIT, see =LICENSE=.
+
+The =princeton-mark-*.pdf= assets are Princeton University trademarks and are
+*not* covered by that licence. Caslon Doric Condensed is a commercial font and
+is referenced, never bundled. Libre Franklin is SIL OFL and ships with TeX Live.

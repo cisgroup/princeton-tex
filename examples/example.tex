@@ -1,0 +1,285 @@
+% ===========================================================================
+% princeton.cls -- the example
+% ===========================================================================
+%
+% This file does two jobs.
+%
+%   1. It documents every class option, in the block below. Each option is
+%      written out explicitly with its alternatives in the comment, so you
+%      change one word to see a different configuration.
+%
+%   2. It exercises every public command and environment the class provides.
+%      Compiling it and looking at the result tells you whether the class is
+%      working.
+%
+% Build it with:
+%
+%     make                 both engines, output in build/
+%     lualatex example     from this directory
+%
+% Options are mutually exclusive by nature: a document cannot be columns=one
+% and columns=two at once. To check a configuration, edit the line and rebuild.
+% The ones most worth flipping are theme, columns and titleformat.
+%
+% ===========================================================================
+
+\documentclass[
+  11pt,                   % passed through to the base class
+  class=article,          % article | report | book -- the base class
+  theme=classic,          % classic | engineering -- which visual identity
+  titleformat=simple,     % simple | cv | fancy   -- heading style
+  columns=one,            % one | two             -- two-column body from p2
+  logo=running,           % default | first | running | none
+  logocolor=color,        % color | black         -- full colour or one colour
+  signature=engineering,  % engineering | university | none  (theme=engineering)
+  fontset=auto,           % auto | princeton | free
+  marginpos=left,         % left | right          -- which side the margin sits
+  itemcolor=pu-gray,      % any defined colour    -- the itemize bullet
+  itemsep=1ex,            % any length            -- spacing between items
+  colorlinks=true,        % true | false          -- coloured links
+  date=true,              % true | false          -- date in the footer
+  titledate=false,        % true | false          -- \date under the title
+  draft=false,            % true | false          -- DRAFT marker in the footer
+]{princeton}
+
+\usepackage{blindtext}    % filler text, for this example only
+
+% --- Metadata -------------------------------------------------------------
+% \author and \email feed the margin block that \makeinfo prints. \version
+% adds a version stamp to the footer and to that block.
+\author{Jürgen Hackl}
+\email{hackl@princeton.edu}
+\address{
+  Princeton University\\
+  59 Olden Street\\
+  Princeton, NJ 08544
+}
+\version{example}
+
+\pretitle{A Princeton}
+\title{Class Example}
+\subtitle{Every option and every command}
+\titlesize{\LARGE}
+
+\begin{document}
+
+\maketitle
+
+% The author block. Lives in the margin, or becomes a tinted aside once the
+% document goes two-column.
+\makeinfo
+
+\tableofcontents
+
+% Everything up to the first \section is front matter. With columns=two the
+% switch to two columns fires at the first \section, so this is the last text
+% set against the wide margin.
+\subsection*{Front matter}
+
+With \texttt{columns=two} the body switches to two columns at the first
+\verb|\section|, so everything above this point keeps the wide margin. Write
+\verb|\startcolumns| yourself if you want the seam somewhere else.
+
+\begin{margindescription}
+\item[Layout] one column here
+\item[Margin] real, not an aside
+\end{margindescription}
+
+% A margin figure and a margin note at the same height would overprint:
+% marginnote and marginfigure do not know about each other. Keep them apart.
+\blindtext
+
+\begin{marginfigure}
+  \caption{A \texttt{marginfigure}. In two columns it becomes an ordinary
+    column-width float}
+  \includegraphics[width=\linewidth]{example-image-a}
+\end{marginfigure}
+
+\section{The margin apparatus}
+
+Everything in this section lives in the margin when the document is set in one
+column. In two columns there is no margin, so each one falls back to something
+sensible without being renamed.
+
+\subsection{margindescription}
+
+\begin{margindescription}
+\item[Created] 2026-09-05
+\item[Purpose] exercising the class
+\item[Renamed] nothing
+\end{margindescription}
+
+\blindtext
+
+\subsection{customdescription}
+
+The same list without the margin wrapper, for use inline.
+
+\begin{customdescription}
+\item[Field] a description list with orange labels
+\item[Second] a second field
+\end{customdescription}
+
+\section{Figures and tables}
+
+\subsection{Side captions}
+
+\begin{figure}[ht]
+  \sidecaption{A \texttt{figure} with \texttt{\textbackslash sidecaption}, which
+    puts the caption in the margin}
+  \includegraphics[width=\linewidth]{example-image-a}
+\end{figure}
+
+\blindtext
+
+\begin{figure}[ht]
+  \SideCaption{A \texttt{figure} with \texttt{\textbackslash SideCaption}, the
+    class wrapper around it}
+  \includegraphics[width=\linewidth]{example-image-b}
+\end{figure}
+
+\blindtext
+
+\subsection{princetonfigure, both modes}
+
+This environment exists for Org mode export. Mode \texttt{f} is an ordinary
+figure, mode \texttt{m} a margin figure.
+
+\begin{princetonfigure}[ht][f]
+  \includegraphics[width=\linewidth]{example-image-a}
+  \caption{\texttt{princetonfigure} in mode f}
+\end{princetonfigure}
+
+\blindtext
+
+\begin{princetonfigure}[ht][m]
+  \includegraphics[width=\linewidth]{example-image-a}
+  \caption{\texttt{princetonfigure} in mode m}
+\end{princetonfigure}
+
+\blindtext
+
+\subsection{Full-width floats}
+
+\texttt{largefigure} and \texttt{largetable} widen into the margin in one
+column, and span both columns in two. From Org mode they are reached with
+\texttt{:float largefigure} or \texttt{:float largetable} in the block's
+\texttt{ATTR\_LATEX} line.
+
+\begin{largefigure}
+  \caption{A \texttt{largefigure}}
+  \includegraphics[width=\linewidth]{example-image-a}
+\end{largefigure}
+
+\begin{largetable}
+  \caption{A \texttt{largetable}, and a summary of what the margin commands do
+    in each layout}
+  \centering
+  \begin{tabular}{p{34mm}p{40mm}p{40mm}}
+    \hline
+    Command & One column & Two column \\
+    \hline
+    \verb|\makeinfo|        & margin block   & tinted aside \\
+    \verb|margindescr.|     & margin list    & tinted aside \\
+    \verb|marginfigure|     & margin float   & column float \\
+    \verb|\sidecaption|     & margin caption & ordinary caption \\
+    \verb|largetable|       & widened        & spans both columns \\
+    \hline
+  \end{tabular}
+\end{largetable}
+
+\blindtext
+
+\section{Type, lists and maths}
+
+\subsection{Lists}
+
+\begin{itemize}
+\item An itemize item. Its bullet takes the \texttt{itemcolor} option
+\item A second item, spaced by \texttt{itemsep}
+\end{itemize}
+
+\begin{enumerate}
+\item An enumerate item
+\item A second one
+\end{enumerate}
+
+\subsection{Figure styles}
+
+The identity module exposes the alternate figure sets of whichever face is in
+use.
+
+\begin{itemize}
+\item Lining figures 0123456789
+\item Oldstyle, \verb|\textos|: \textos{0123456789}
+\item Tabular, \verb|\texttab|: \texttab{0123456789}
+\item Display face, \verb|\princetondisplay|: {\princetondisplay Princeton}
+\end{itemize}
+
+\subsection{Mathematics}
+
+Maths is matched to the text face, so it changes with the theme.
+
+\[
+  \int_0^{\infty} e^{-x^2}\,dx = \frac{\sqrt{\pi}}{2},
+  \qquad \alpha\beta\gamma \in \mathbb{R},
+  \qquad \mathbf{A}\mathbf{x} = \mathbf{b}.
+\]
+
+\subsection{Links}
+
+A hyperlink: \href{https://engineering.princeton.edu}{Princeton Engineering}.
+A URL: \url{https://www.princeton.edu}.
+
+\section{CV commands}
+
+These work under any heading style. Switch the heading option to CV in the
+block at the top to see those headings too, where subsection titles move into
+the margin.
+
+% \cvmargin and \cvitem must BEGIN a paragraph. \cvlabel hangs its key left of
+% the current position, so at the start of a line it lands in the gap between
+% the margin and the text block, which is the intent. After a run-in heading it
+% would hang from wherever that heading ended, in the middle of the sentence.
+\subsection*{Positions}
+
+\cvmargin{Jan 2023 ongoing}\cvinfo{Princeton} An entry with the date in the
+margin and the institution flushed right.
+
+\cvmargin{2020 to 2023}\cvinfoit{Somewhere else} A second entry, with the
+institution in italics.
+
+\subsection*{Keyed entries}
+
+\cvitem{2025}{J33} An entry keyed with \verb|\cvitem|. The date goes in the
+margin and the key hangs in the gap to the left of this text, where it reads as
+a reference tag rather than as part of the sentence.
+
+\cvitem{2024}{J32} A second keyed entry, so the two keys line up.
+
+\subsection*{Referring to them}
+
+\verb|\cvref| takes a bracket style and a size. The usual form is
+
+\verb|\cvref[both]{J33}[\scriptsize]|
+
+which gives \cvref[both]{J33}[\scriptsize]. The other styles bracket a run as a
+whole: \verb|left| gives \cvref[left]{J33}[\scriptsize] and \verb|right| gives
+\cvref[right]{J32}[\scriptsize]. With no style it is bare: \cvref{J33}.
+
+\section{Full-bleed background}
+
+\verb|\fullfigure| stamps an image across the whole page, behind the text, on
+the current page only. It takes \texttt{height}, \texttt{align} and
+\texttt{angle}.
+
+\fullfigure[height=2in,align=b]{example-image-b}
+
+\blindtext
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

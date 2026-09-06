@@ -1,0 +1,302 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{princeton-identity}[2026/09/05 v1.1 Palette and fonts for the princeton class]
+
+% This module owns the colour palette and the text, display and maths font
+% resolution. The two belong together because both are decided by the theme.
+%
+% It is loaded by princeton.cls after option processing and validation, and
+% reads \princeton@theme and \princeton@fontset from the class directly rather
+% than taking package options of its own.
+%
+% Two themes:
+%
+%   classic      The University identity the class has always used. Princeton
+%                Monticello, an old-style serif, with orange EE7F2D.
+%   engineering  The Princeton Engineering identity published October 2024.
+%                Libre Franklin, a grotesque sans, with orange F58025, Caslon
+%                Doric Condensed Bold for display, and a chevron device.
+%
+% classic must remain byte-for-byte what the class produced before this
+% module existed. Anything that would change its output belongs in the
+% engineering branch instead.
+
+\RequirePackage{etoolbox}
+\RequirePackage{ifthen}
+\RequirePackage{iftex}
+\RequirePackage{xcolor}
+
+% ===========================================================================
+% Palette
+% ===========================================================================
+% Colours are named by ROLE rather than by hue, because in the Engineering
+% identity the role decides the value.
+%
+% Princeton Engineering orange measures 2.63:1 against white. WCAG AA needs
+% 4.5:1 for body text and 3:1 for large text, so it fails both, and the
+% guidelines themselves permit it only "providing the type size is above 18pt"
+% (page 3.4, and again on the letterhead page 5.1). A single \pu-orange used
+% everywhere would therefore be correct on a title and wrong on a hyperlink.
+% Splitting display from link makes that mistake impossible to make.
+%
+% Role colours, with measured contrast against white:
+%
+%   pu-display   large type only, above 18pt, plus rules, fills and chevrons
+%   pu-heading   section headings
+%   pu-link      hyperlinks and any small type that must read as an accent
+%   pu-rule      dividers and hairlines, never type
+%
+\ifthenelse{\equal{\princeton@theme}{engineering}}{%
+  % ---- Princeton Engineering, October 2024 --------------------------------
+  % Core palette, transcribed from page 4.3. The asset pack ships no machine
+  % readable swatch file, so these values come from the guidelines PDF.
+  \definecolor{pu-orange}{HTML}{F58025}    % PMS 158 C/U   2.63:1  display only
+  \definecolor{pu-gray}{HTML}{AFAFAF}      % Cool Gray 5   2.19:1  rules only
+  \definecolor{pu-midgray}{HTML}{5A575B}   % PMS 4294 C    7.12:1  safe for text
+  % Not in the published palette. A darkened orange for type below 18pt, which
+  % the brand palette simply does not provide an accessible accent for.
+  \definecolor{pu-orange-text}{HTML}{B35300} %              5.06:1  safe for text
+  % Accents, page 4.3. Every Vibrant and Deep value passes AA on white.
+  \definecolor{pu-red}{HTML}{BF0057}       % 6.26:1
+  \definecolor{pu-purple}{HTML}{8100DD}    % 7.05:1
+  \definecolor{pu-blue}{HTML}{0018F4}      % 8.62:1
+  \definecolor{pu-green}{HTML}{007A17}     % 5.53:1
+  \definecolor{pu-deepred}{HTML}{930606}   % 9.25:1
+  \definecolor{pu-deeppurple}{HTML}{60005B}% 12.74:1
+  \definecolor{pu-deepblue}{HTML}{001E68}  % 15.16:1
+  \definecolor{pu-deepgreen}{HTML}{044900} % 10.72:1
+  % Tints, page 4.3. Backgrounds and chevron layering only, never type.
+  \definecolor{pu-tintred}{HTML}{FF9FFD}
+  \definecolor{pu-tintpurple}{HTML}{CEA4FF}
+  \definecolor{pu-tintblue}{HTML}{60DBF5}
+  \definecolor{pu-tintgreen}{HTML}{72E555}
+  % Role assignments.
+  %
+  % One orange throughout, by explicit request: the brand orange used on the
+  % title is also used for hyperlinks and the margin info labels, rather than
+  % the darkened pu-orange-text variant. That variant is still defined above if
+  % it is ever wanted, but nothing uses it by default.
+  %
+  % The accessibility consequence, recorded once and not repeated: at body size
+  % this orange measures 2.63:1, below the 4.5:1 WCAG AA wants and below the
+  % 18pt floor the guidelines themselves set. Section headings stay black.
+  \colorlet{pu-display}{pu-orange}
+  \colorlet{pu-heading}{black}
+  \colorlet{pu-link}{pu-orange}
+  \colorlet{pu-rule}{pu-gray}
+}{%
+  % ---- Classic, the existing University identity ---------------------------
+  % Unchanged from what the class defined inline before this module existed.
+  \definecolor{pu-orange}{HTML}{EE7F2D}
+  \definecolor{pu-gray}{gray}{0.6}
+  \colorlet{pu-midgray}{pu-gray}
+  \colorlet{pu-orange-text}{pu-orange}
+  % Every role resolves to the same orange, so output is identical to before.
+  \colorlet{pu-display}{pu-orange}
+  \colorlet{pu-heading}{pu-orange}
+  \colorlet{pu-link}{pu-orange}
+  \colorlet{pu-rule}{pu-gray}
+}
+
+% ===========================================================================
+% Fonts
+% ===========================================================================
+
+% Whether fontspec is usable, i.e. whether system fonts are reachable at all.
+\newbool{princeton@fontspec}
+\ifXeTeX \booltrue{princeton@fontspec}\else\fi
+\ifLuaTeX\booltrue{princeton@fontspec}\else\fi
+
+% Which text face was actually selected. Later code and the class warnings both
+% branch on the outcome rather than re-deriving it.
+\newbool{princeton@monticello}   % is the Monticello TYPEFACE in use (classic theme, tier 1)
+\newbool{princeton@doric}        % Caslon Doric available for engineering display
+
+\ifbool{princeton@fontspec}{%
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX}
+}{%
+  % inputenc is deliberately not loaded: UTF-8 has been the pdfLaTeX default
+  % since the 2018 kernel. fontenc still matters for hyphenation and glyph
+  % coverage.
+  \RequirePackage[T1]{fontenc}
+}
+
+\ifthenelse{\equal{\princeton@theme}{engineering}}{%
+  % =========================================================================
+  % Engineering theme
+  % =========================================================================
+  % Body is Libre Franklin in every engine. The librefranklin package is engine
+  % aware, and Libre Franklin is SIL OFL and ships with TeX Live, so unlike the
+  % classic theme there is no licensed-font tier to fall back from. A
+  % collaborator and CI get exactly what the author gets for body text.
+  %
+  % Display is Caslon Doric Condensed Bold, which IS licensed and cannot be
+  % redistributed, so it is detected rather than assumed.
+  %
+  % Maths is newtxsf. A sans body against serif maths reads as a mistake, and
+  % newtxsf compiles under all three engines, so it needs no second code path.
+  % scaled=0.94 matches Libre Franklin's apparent size to Monticello's, so a
+  % document does not change size when it changes theme. Measured at 11pt,
+  % Monticello's x-height is 5.475pt against Libre Franklin's 5.8035pt, a ratio
+  % of 0.943. x-height rather than point size is what the eye reads as "how big
+  % is this text", which is why the nominal sizes matching is not enough.
+  \RequirePackage[sfdefault,scaled=0.94]{librefranklin}
+  \RequirePackage{newtxsf}
+
+  \ifbool{princeton@fontspec}{%
+    \ifthenelse{\equal{\princeton@fontset}{free}}
+      {}% forced onto the open fallback, leave princeton@doric false
+      {\IfFontExistsTF{Caslon Doric Condensed}
+        {\booltrue{princeton@doric}}
+        {\ifthenelse{\equal{\princeton@fontset}{princeton}}
+          {\ClassError{princeton}
+            {fontset=princeton but Caslon Doric Condensed is not installed}
+            {Install Caslon Doric Condensed Bold, or use fontset=free to accept
+             Libre Franklin Extra Bold for display type.}}
+          {}}}%
+  }{%
+    \ifthenelse{\equal{\princeton@fontset}{princeton}}
+      {\ClassError{princeton}
+        {fontset=princeton requires lualatex or xelatex}
+        {pdfLaTeX cannot load the Caslon Doric system font. Use lualatex, or
+         fontset=free / fontset=auto to accept Libre Franklin Extra Bold.}}
+      {}%
+  }
+
+  \ifbool{princeton@doric}{%
+    % The guidelines ask for tracking of 20 on the identity lock-up and -10 on
+    % running display type. LetterSpace is in percent of the em, so 2.0 here
+    % corresponds to the 20/1000 the brand manual specifies.
+    \newfontfamily\princetondisplay{Caslon Doric Condensed}[LetterSpace=2.0]
+  }{%
+    % Libre Franklin Extra Bold is the closest open substitute for a condensed
+    % bold display face. It is noticeably wider than Caslon Doric, so headings
+    % set in it will run longer.
+    \newcommand{\princetondisplay}{\bfseries\fontseries{eb}\selectfont}
+  }
+
+  % Figure-style commands, kept so documents move between themes unchanged.
+  % Libre Franklin has no separate oldstyle or tabular cut in this setup, so
+  % both resolve to the normal face rather than erroring.
+  \newcommand{\princetonoldstyle}{\normalfont}
+  \newcommand{\princetontabular}{\normalfont}
+  \newcommand{\textos}[1]{{\princetonoldstyle #1}}
+  \newcommand{\texttab}[1]{{\princetontabular #1}}
+
+  \ifbool{princeton@doric}{}{%
+    \ClassWarningNoLine{princeton}
+      {Caslon Doric Condensed not in use; display type falls back to Libre
+       Franklin Extra Bold.\MessageBreak
+       Body text is unaffected: Libre Franklin is used in every engine}%
+  }
+
+  % Title block. The guidelines put the display face and the brand orange on
+  % the largest type on the page, which is where orange is permitted.
+  %
+  % NOTE: this assumes the title is set above 18pt, which it is at every
+  % \titlesize the class offers by default (\huge is 24.9pt and \LARGE 20.7pt
+  % at 11pt base). A document that sets \titlesize to something small would put
+  % orange below the threshold the guidelines allow.
+  \newcommand{\princeton@titlefont}{\princetondisplay}
+  \colorlet{princeton@titlecolor}{pu-display}
+}{%
+  % =========================================================================
+  % Classic theme
+  % =========================================================================
+  % Three tiers:
+  %   1. lualatex or xelatex with Princeton Monticello installed -> Monticello,
+  %      using the whole family: roman, bold, italic, bold italic, small caps,
+  %      oldstyle figures, tabular figures and the display cut.
+  %   2. lualatex or xelatex without it            -> XCharter.
+  %   3. pdfLaTeX, which cannot load system fonts  -> XCharter.
+  %
+  % Tiers 2 and 3 share one code path because the XCharter package is engine
+  % aware and works under all three engines.
+  %
+  % Monticello is a Binny & Ronaldson derived American old style. XCharter, a
+  % Charter descendant, matches its sturdiness and large x-height more closely
+  % than the Times-like alternatives, so a document degrades in colour and
+  % texture rather than in kind.
+  \ifbool{princeton@fontspec}{%
+    \ifthenelse{\equal{\princeton@fontset}{free}}
+      {}% forced onto the fallback, leave princeton@monticello false
+      {\IfFontExistsTF{PrincetonMonti}
+        {\booltrue{princeton@monticello}}
+        {\ifthenelse{\equal{\princeton@fontset}{princeton}}
+          {\ClassError{princeton}
+            {fontset=princeton but the PrincetonMonti fonts are not installed}
+            {Install the Princeton Monticello family, or use fontset=free.}}
+          {}}}%
+  }{%
+    \ifthenelse{\equal{\princeton@fontset}{princeton}}
+      {\ClassError{princeton}
+        {fontset=princeton requires lualatex or xelatex}
+        {pdfLaTeX cannot load the Monticello system fonts. Use lualatex, or
+         fontset=free / fontset=auto to accept the fallback family.}}
+      {}%
+  }
+
+  % Maths, matched to the text face and identical across all three engines.
+  % Loaded BEFORE the text font is selected. newtxmath installs its own math
+  % alphabets, and if it runs after \setmainfont it points \mathrm at the main
+  % family in OT1, which a fontspec-loaded font does not provide, producing
+  % "Font shape OT1/PrincetonMonti undefined" on every document.
+  \RequirePackage[charter,vvarbb]{newtxmath}
+
+  \ifbool{princeton@monticello}{%
+    % ---- Tier 1: the full Princeton Monticello family ---------------------
+    \setmainfont[
+      BoldFont={PrincetonMontiBD},
+      ItalicFont={PrincetonMonti Italic},
+      BoldItalicFont={PrincetonMontiBD Italic},
+      SmallCapsFont={PrincetonMontiSCap},
+      SmallCapsFeatures={Numbers=Lining},
+      ]{PrincetonMonti}
+    % Additional cuts the class previously ignored entirely.
+    \newfontfamily\princetondisplay[
+      ItalicFont={PrincetonMontiDS Italic},
+      ]{PrincetonMontiDS}
+    \newfontfamily\princetonoldstyle[
+      ItalicFont={PrincetonMontiOS Italic},
+      BoldFont={PrincetonMontiBDOS},
+      BoldItalicFont={PrincetonMontiBDOS Italic},
+      ]{PrincetonMontiOS}
+    \newfontfamily\princetontabular{PrincetonMontiTab}
+    % Text commands for the alternate figure sets.
+    \DeclareTextFontCommand{\textos}{\princetonoldstyle}
+    \DeclareTextFontCommand{\texttab}{\princetontabular}
+  }{%
+    % ---- Tiers 2 and 3: the free fallback ---------------------------------
+    \RequirePackage{XCharter}
+    % Keep the tier 1 interface available so a document that uses these commands
+    % still compiles when shared or built in CI. XCharter carries its own
+    % oldstyle and tabular figure sets, reached through its own text commands
+    % rather than through separate font families.
+    \newcommand{\princetondisplay}{\normalfont}
+    \newcommand{\princetonoldstyle}{\normalfont\osfstyle}
+    \newcommand{\princetontabular}{\normalfont\tlfstyle}
+    \newcommand{\textos}[1]{\textosf{#1}}
+    \newcommand{\texttab}[1]{\texttlf{#1}}
+  }
+
+  % Tell the reader which tier they got, so output that differs from the
+  % author's is explained rather than mysterious.
+  \ifbool{princeton@monticello}{}{%
+    \ClassWarningNoLine{princeton}
+      {Princeton Monticello not in use; typesetting with the free XCharter
+       fallback.\MessageBreak
+       Use lualatex with the Monticello fonts installed for branded output}%
+  }
+
+  % Title block, exactly as the class set it before this module existed: bold in
+  % the body face, in black.
+  %
+  % \bf, not \bfseries, deliberately. \bf is the LaTeX 2.09 form and also resets
+  % family and shape, and swapping it for \bfseries moved 24 pixels on the title
+  % page. That is small, but the whole point of this theme being additive is
+  % that classic output does not move at all.
+  \newcommand{\princeton@titlefont}{\bf}
+  \colorlet{princeton@titlecolor}{black}
+}
+
+\endinput

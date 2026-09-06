@@ -299,3 +299,28 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
+# =============================================================================
+# princeton-tex
+# =============================================================================
+# The generic *.pdf rule above stays commented out on purpose: the mark assets
+# the class needs are tracked PDFs and must survive. Ignore the specific places
+# untracked material lands instead.
+
+# Generated output. Both are reproducible: build/ by `make all`, baseline/ by
+# `make reference`.
+build/
+baseline/
+examples/*.pdf
+examples/*.synctex.gz
+
+# Source material kept on disk for reference but not this repository's to
+# redistribute: Princeton's identity guidelines, sample documents.
+reference/
+
+# Vector sources for the marks. Only `make assets` reads them, and it takes its
+# input from the identity asset pack, so they are not needed in a clone.
+*.svg
+
+# Emacs autosave and lock files
+\#*\#
+.\#*
